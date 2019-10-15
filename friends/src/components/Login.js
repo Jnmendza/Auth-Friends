@@ -13,7 +13,7 @@ const Login = props => {
         setUser({
             credentials: {
                 ...user.credentials,
-                [e.target.name]: e.target.value
+                [e.target.id]: e.target.value
             }
         })
     };
@@ -22,7 +22,12 @@ const Login = props => {
         e.preventDefault();
         axiosWithAuth()
             .post('/api/login', user.credentials)
-    }
+            .then(response => {
+                localStorage.setItem('token', response.data.payload);
+                user.props.history.push('/protected');
+            })
+            .catch(error => console.log(error.response));
+    };
 
     
         return(
